@@ -1,0 +1,1529 @@
+Fazer as provas até o fim de março
+* Fazer ainda neste fim de semana
+
+
+Participantes 
+* Jeferson -> Linux Tips
+* Raphael Campelo -> Oracle
+* Artur Vianna -> Oracle
+* Otavio Lemos -> Oracle
+* Luiz silva -> Oracle
+* Wagner Munhoz -> Oracle
+* Pedro Christo -> Oracle
+* Gustavo Alves -> Oracle
+* Debora Silva -> Oracle
+* Vinicius Hakamine -> Oracle
+* Heloisa Escobar -> Oracle
+* Rafael dias -> Oracle
+
+OCI
+* Projeto iniciada em 2017 em somenet duas regiões
+* Em 2021, tem mais de 34 regiões
+* Existe projetos para a construção de mais regiões
+* Mesmo custo em qualquer região, porém a diferença de performa por causa da distancia
+
+Menu lateral 
+* Pessoal chama de menu do hamburguer -> Menu para acesso geral as ferramentas do OCI
+
+Regiões
+* È possível criar aplicações em qualquer região
+* Para contas trial, a opção multi-região é indisponivel, somente é liberada a US East(ashburn)
+* Não importa a região, é simples assinar e todas tem o mesmo valor
+
+Cloud shell 
+* É uma VM atrelada ao usuário
+* Shell do proprio usuário com várias ferramentas já imbutidas, como: python, java, terraform e demais 
+
+Oracle Cloud é a unica que entrega SLA para qualquer tipo de serviço
+* Ela tem o SLA de todos os serviços oferecidos 
+
+Arquitetura
+* Regiões
+	* localização geografica dos data-centers, os AD (Avaliability Domains)
+* AD (Availability Domains)
+	* Disponibilidade de data-centers dentro da região, de 1 a 3
+	* Uma região é uma determinada área geográfia que pode possuir usma quantidade minima de 1 data-center oracle, até 3 deles 
+	* Se tiver mais de um 1 dentro de uma mesma região, ha contigencia geográfica (Se um cai, um dos outros dois tomá o lugar)
+* FD (Fault Domains)
+	* Cada Ad tem três FD, que são estruturas separadas fisicamente dentro do mesmo local
+
+Tenacy and compartments 
+* Tenacy é equivalente a uma conta, é criada uma conta chamada de 'root compartment' para provisionar mais recursos
+* Compartimento -> Agrupamentos de elementos -> Seguegração de componentes, divisão de infra, custo e demais por determinado projeto ou ação
+
+Compartimentos são caixas de recursos que não se compartilham, isso é, se uma VM X existe dentro do compartimento Y e ela for trocada para o compartimento A, a VM X vai perder todos os acessos a recursos disponiveis em Y
+* Obj é segregar e proteger
+* É possível criar sub-níveis de compartimento que ficam aninhados ao compartimento principal
+
+É possível mudar recursos entre compartimentos sem a parada do serviço, claro que existe as necessidades de cada VM
+	
+Para ver os compartimentos vá em -> Menu lateral -> Identidade e segurança -> Compartimentos 
+
+Evita criar recursos em ROOT, afinal, segurança e um ponto importante, além de um bom estrutramento facilita a manutenção e gerenciamento
+
+Dentro do menu do Oracle, vá no menu lateral -> Computer -> Instances -> Você consegue ver as instancias e os compartimentos que ela pertence
+
+No Menu lateral -> Governancia -> Tenacy Explorer -> Pesquisar os serviços dentro dos compartimentos
+* Retorna quem esta usando oq 
+* Ajuda muito em grandes projetos
+
+Tag -> Referencias aos containers e serviços -> isso ajuda a fazer ações em grupos
+* Pode usar essa tag para fazer vários tipos de pesquisas e ações, como exemplo, ver o custo de VM's com determinada Tag ou derrubar todos as VM's com determinada tag
+
+
+__________________________________________________________________
+### Identity Access and Security
+OCI IAM -> Gerenciador -> Tem que dar as permissões (Polices)
+* As polices liberarm ações aos usuários, um usuário novo não tem nada, somente com polices será possível fazer ações
+* Polices são dadas aos compartimentos, um usuário recebe uma police que pode sar usada no determinado compartimento
+
+
+Identidade de acesso e segurança (identidy access and security)
+IAM -> Identidy access management
+Trabalha baseado em polices de segurança
+Modelo de trabalho é o Zero trust -> Zero confiança -> Exemplo, um usuário novo tem zero permissões, não pode fazer nada, é necessário dar as polices de permissão a ele para ter alguma utilidade
+ 
+ IMA -> Gera as polices -> Polices que gera as permissões -> Que são entregues aos usuários para ter permissões de execução dentro do compartilhamento
+ 
+ Polices são aplicadas em compartimentos
+ 
+ Uma police possui essa estrutura
+ 
+ allow group <group_name> to <verb> <resource-type> in compartment <compartment_name> [where <conditions>]
+ 
+ group_name -> 
+ verb -> Ações possivis (inspect, read, use, manage)
+ resurce ->  Servicos que se pode usar (Cluster-family, virtual-network-family, volume-family, instance-family)
+ compartiment-name -> Compartilhamento alvo
+ conditions -> 
+ 
+Formas de autenticações
+* API signkey 
+* Token -> Auth tokens
+* Usuário e senhas
+* MFA -> Multi factor autentication -> Autenticação de dois fatores (Pode ser por token ou email)
+
+_______________________________________________________________________-
+
+
+Reference Model -> Compartimentos (Componentes)
+	* Referente a infraestrura
+	* Criar ambientes isolados como:
+		* Rede
+		* Ambiente de teste
+		* projetos
+
+
+____________________________
+Para criar um compartimento é -> Menu lateral -> identidade e segurança -> Compartimentos 
+* Tem que colocar o nome -> Obrigatorio
+* Descrição -> Obrigatorio
+* Tem que ser criado abaixo de uma estrutura já existente
+* Pode ter tags
+
+* Não existe limites para a criação de compartimentos  -> Porém subvolumes vão até 6
+____________________________
+
+Ver as instancias -> Menu lateral -> Compute -> Instances
+* É possível ver os compartimentos dentro do list scope da página de instancias
+* A um limite de 5000 compartilhamentos
+
+
+		
+
+
+
+Criar compartimentos
+* Nome
+* Descrição
+* Debaixo de quem
+
+
+Quando você for criar instancias de execução, elas tem que estar de baixo de um compartimento
+
+Se você criar algo, más não atribuir a algum, não a problema, pode ser atribuido depois
+
+
+
+
+
+
+_______________________________________________________
+
+VCN -> Virtual cloud network
+* Rede da nuvem -> LAN
+* É possível trabalhar com regras de firewall
+* Da para trabalhar com regras de rede 
+* VNC trabalha entre redes /16 a /30
+* Cria uma rede publica e privada
+* Trẽs gateways
+* Cria uma rede interna e Nat
+* A VCN fica somente em uma unica região  oracle e é copiada para um u mais CIDR block de suas escolha (Máximo de 5)
+* Oracle recomenda o uso da padronização RFC 1918
+* Renge de siderblock (/16 a /30)
+
+rede virtual na nuvem
+VNC é regional, más ela é valida para todos os AD's
+Oracle recomenda o uso do padrão RFC1918 para a construção de redes
+Renge de CIRD block é até /30 -> 4 máquinas -> 3 Máquinas e uma entrada
+
+subnet
+* VNC é a primaira parte de provisionar rede dentro da cloud
+	* provisionar um pedaço da rede
+* A VNC será provisionada para criar subredes internas  
+* Você provisiona recursos dentro da sub-net (Loadbalancer e demais) -> Relacionadas a gerenciamento de redes
+
+
+Limites
+200 VCN's por região
+300 sub-nets pode VNC
+
+
+Sub-net pode ser publica ou privada 
+* privada -> Somente consegue prover recursos ha aqueles que estão com endereço dentro da rede interna
+* publico -> Se selecionar esse é obrigado a ter um IP publico e os Ip's privados
+	* Permite selecionar quais recursos estaram publicos
+	
+	
+Routing table
+* Tipo um iptables do linux
+* Faz as regras de acesso a rede interna
+
+Security list
+* Regras de firewall para subnets (Regras para entrada e saída da subnet)
+* A aplicação da regra funciona a toda a sub-rede que possui a secury list
+* Statfull -> Regra geral -> Toda a regra criada na security lista irá gerar uma regra de entrada ou saída de forma automática a regra criada
+* Statless -> Regra por ação ->> Se você criou uma regra de entrada, é necessário criar manualmente uma regra de saída
+* Ações de alterações de interfaces mantem  em execução para garnati estabilidade 
+
+
+Network security group
+* Faz o mesmo serviço que o security list
+* A diferença entre ele e o security é que ele trabalha direto na interface de rede virtual da VM
+* O security é para a subrede e o network é somente para interface da VM(Chamada comumente de VNIC)
+
+Ambos os Security list e Network group trabalham da forma que são listas que as VM's podem ser integradas
+
+Remote VCN Peering (RCP)
+* Interconectar VCN entre regiões
+* Ele é um componente de DRG -> Remote Peering Connection (Tipo um gateway)
+
+
+
+Tabela de roteamento
+Exemplos:
+* Rede privada -> NAT Gateway -> Só permite a saída, não permite conexões (Bidirecional) 
+* Rede publica -> Internet Gateway -> Saída para a rede publica, entrada e saída default das conexões
+* Service Gateway -> Conexão de recursos da oracle cloud -> Faz um corta caminho, acesso direto os recursos oracle em vez de ir para a net, achar e retornar
+
+
+
+DRG
+* Pode fazer conexões loais, publicas, RCP e demais
+* Firn
+* Fornece recursos para criar um RPC -> Remote VNC - Peering
+
+
+Local VNC Peering
+* Conecta LPG das mesmas regiões
+* Estabelece conexão entre VCN's da mesma região -> Necesita liberar as regras de firewall para fazer a conexão funcionar
+
+
+3 Modos de conexão da OCI
+* Publici Internet 
+	* Não cobra por IP publico / Reservado (Valor Unico de IP Publico);
+	* Reservado -> IP Unico dentro da Oracle
+	* Ephemaral -> IP unico até o termino do serviço -> Depois que termina o serviço, o IP é retornado ao Pool de IP's da oracle
+		* Mão é IP dinamico -> IP se mantem o mesmo até o fim da operação
+	* Internet Data -> Oferece trafego de até 10TB
+		-> Inbound é gratuito
+		-> O limite é para o outbound
+* IPSec VPN
+	* Ofere conexões de VPN
+	* Fornece conexão direta entre o host e a oracle
+	* IPSec seguro, com autenticação e encriptado
+	* Pode fazer as conexões de duas formas já oferecidas pela oracle:
+		* OCI Managed VPN Service (free)
+		* Software VPN (Running on OCI compute)
+* Oracle Fast Connect
+	* Fornece uma conexão dedicata e forá da internet a oracle
+		* Latencias baixas	
+	* Velocidade de ação de 1 a 10 Gbps
+	* SLA pela conexão
+	* A cobrança é feita por porta -> Cada porta tem um custo independente
+	
+Network Visualizer
+* Demonstra a conexão de rede de forma gráfica/visual
+* utilizado como vizualizador e uma debug das redes - Mlhorar performace
+* Para acessar o mapa, vá em: Menu hamburguer -> network -> Network visualizer
+
+Load Balancer
+* Mantera a alta disponibilidade do servico
+* Distribuição de carga entre as máquinas
+* oracle já disponibiliza um failOver (Casa caia, ela repoem até os loads
+* Pode ser publico ou privado
+* Tem dois tipo
+	* OCI Load balancer -> Trabalha da camada 7 como um proxy e com tratamentos inteligentes
+	* Network load balancer -> Camada 3, trabalha somente com o tratamento de pacotes (free)
+	
+
+Criar uma rede virtual na pratica
+
+Menu Lateral (hamburguer) -> Redes -> Virtual Network
+* Selecione o compartimento(opcional) -> Más já adianta o trampo
+* Click em start VNC Wizard -> Create VNC com conectividade a internet
+* Obrigado a dar uma descrição
+* Depois crie default mesmo (Só pra teste) e veja:
+	* Cria:
+		* Subnet publica
+		* subnet privada
+		* 3 gateways
+		* 2 security lists
+		* 2 Route tables
+* Feito, criado, agora só utilizar
+* Se der um erro, só destruir e contruir um novo, pode ter sido um erro de momento
+	* Se o erro persistir, confirma seu limite de Ip's publicos
+	
+
+Coisas para ficar esperto
+* VCN
+* Service gateway
+* NAT gateway
+* IGW
+* DGE
+* Internet gateway
+* Security list
+* Network security group
+* DRG
+* Route table
+________________________________________________________________________________
+
+
+
+
+
+
+
+
+
+________________________________________________________________________________
+
+Compute database
+
+Compute instances -> bare metal & Virtual Machines
+
+
+
+
+Vale comentar que essas images são disponibilizadas a oracle, ela não monta nenhuma delas
+
+
+* oracle te passa o Bare, tu que se vira nele
+	* Capacidade de:
+		* KVM
+		* VMWare
+		* Microsoft hyper-v
+		* etc..
+		
+Decicated VM hosts (DVH)
+* Tem Bare e VM rodando junto
+* Se é muito necessário, joga a VM para o Bare fazer o serviço
+* oracle tem parceiria com procssadores Intel, AMD e Ampere (ARM)
+* Trabalham com Shapes, podendo provisionar de forma escalavel ou fixo
+	* Tipos de shapes
+		* Standard
+		* DenseIo
+		* HPC
+		* GPU
+		* Customizado
+	* Os tipos são tipos genericos para a realização de determinadas tarefas	
+* OCPU -> Um processador fisico da Oracle com dois threads
+* É possível reservar hardware por determinados momentos
+
+* Preemptible instances
+* 50% mais barato pq é um recurso que o datacenter não esta usando no momento, más se o data precisar desse recursos, você é derrubado
+* Seu serviço tem que ter garantias e previsão de falhas
+
+On-demand -> Serviço padrão -> CPU dedicado e demais
+
+Oracle Images -> Imagens legalizadas do Oracle que podem ser usadas nos servidores
+
+BIOU -> Empacotar uma imagem e mandar para a Oracle e usar de VM, tambem é possível compartilhar ela
+
+marktplace -> Disponibiliza imagens com configurações para você usar
+
+Cloud Shell -> Shell interrativo com 5GB fixo (Só apaga os aquivos depois de 6 meses sem acesso)
+
+Scale-up e down -> provisionar mais ou menos recursos conforme a necessiade, com limites baseados no CPU que foram anteriormente selecionados, vale comentar que nisso é necessario rebootar a máquina
+
+Sacle-Out e in -> Esse é a escala horizontal que é feito de forma automatica, a aplicação tem que ter essa capacidade
+
+
+
+
+
+Menu de hamburg -> Computer -> Instance
+
+Image and shape
+* Escolher imagem
+* Escolher hardware -> Escolher uma VM ou um baremetal
+* Depende o CPU que vocÊ escolhe, existem SHAPE's fixos
+* È bom colocar hostname nas instancias -> Já que a oracle só resolve as coisas só por nome
+* A oracle resolve drivers exoticos até certo ponto, no pior dos casos, faça o up e veja se é compativel
+* Todas as VM's tem ssh com chave dupla para conexão
+* O boot-volume -> Selecionar a forma de boot da vm
+
+Para finalizar, tem duas opções:
+* Save stack -> Faz uma rotina Terrform das configurações
+* Create -> Monta a máquina
+
+
+
+
+Opções
+* Bare Metal (BW) -> Acesso total a um hardware dedicado, más está por sua conta
+* Virtual machine (VM) -> Hypervisor VM no baremetal -> Mais comum -> Deixa a infra por conta da oracle e vocẽ só se preocupa em disponibilizar a VM
+* Dedicated VM Hosts (DVH) -> Roda as VM's em um server dedicado e sem concorrencia
+	* Une o barematel e a VM -> O bare é dedicado a roda somente suas VM's 
+
+
+Familia de processadores
+* parceirias com marcas de processadores como: Intel, AMD, Nvidia, Arm e demais
+* Shapes flexiveis e fixos 
+	* Flexiveis -> Hardware customizado -> Pode alterar o CPU, quantidade de memoria e demais
+		* Possuem ranges de alterações
+			* Intel -> 1 a 32 OCPU, 1 a 512GB RAM e até 32Gbps de rede
+			* AMD -> 1 a 64 OCPU, 1 a 1024Gb de RAM e até 40Gbps de rede
+			* Ampere (ARM CPU) -> 1 a 80 OCPU, 1 a 512GB de RAM e até 40GBps de rede
+	* Fixos -> Hardware predefinido -> Moldes -> Criados com base em pesquisas da oracle
+		* Só podem ter Intel
+			* De 1 a 24 OCPU na ordem de (1,2,4,8,16,24) nucles, 15Gb de Ram
+	* Especializados -> Hardwares dedicados a determinada tarefa -> Standar, DenseIO, HPC e GPU
+		* DenseIO -> NVM atachado
+		* HPC -> Baixa latencia de acesso
+		* GPU -> Processamento via GPU (Matricial, não imperativo e demais), tecnologia cuda core
+
+OCPU -> Oracle CPU
+* Equivalente a 1 core com 2 threads
+* È possível selecionar o tipo de OCPU:
+	* On-demand -> Padrão -> Code dedicado performance e disponibilidade garantida -> Mais caro
+	* Capacity Reservation -> Pré-aloca os recursos necessários -> Garante que esses CPU's serão de tal se forem necessários
+	* preemptible Instances -> Cobra mais barato, más é assim, pega os recursos ociosos dos outros e usa pra você, más se os outros precisarem, ele derruba suas instancias e volta para o pessoal
+		* Custo é de 50% do on-demand
+	* Burstable instances
+		* Custo baseado na fração do core
+		* É uma máquina que não trabalha a todo o tempo em 100% e sim em picos de trabalho 
+		* Não garante disponibilidade
+
+Oracle Imagens
+* A oracle já disponibiliza várias imagens, Ex:
+* Ubuntu
+* Centos
+* Windows 
+* E demais outras
+
+BYOI -> Processo que você impacota suas imagens e roda elas no Oracle 
+* Para imagens não disponiveis, essa é a opção mais recomanda
+
+
+Oracle market Place
+* Serve para publicar e pegar imagens da comunidade
+
+
+Cloud Shell
+* Terminal shell Web
+* Máquina Linux OCI CLI e várias ferramentas instaladas (Python, Terraform, Java, SH e outras)
+* 5Gb de espaço persistente (É persistente se você pelo menos tiver um acesso a cada 6 meses)
+	* Da um aviso de 60 dias antes de apagar as coisas
+* Possibilita fazer download e direto do shell terminal
+* Totalmente customizavel
+
+
+Auto-Escalas
+* Vertical scaling -> Adiciona hardware ha máquina -> Necessita realizar um reboot para tanto adicionar, quanto retirar
+	* Scale-up and scale-down
+* Horizontal scaling -> Necessita ter uma aplicação mais inteligente -> Aumenta a quantidade de máquinas para realizar as tarefas -> Feito de maneira automatica
+	* Funciona com um pool de instancias -> Isso é, cria uma piscina e define limites, se quase chegar num limite, cria uma máquina para continuar suportanto a aplicação, caso não precisar mais, ele derruba essa instancia e volta para o padrão
+	* Scale-out and scale-in
+* Necessário defirnir os gatilhos para a necessidade de subir mais máquinas
+
+
+OCI Auto Scaling
+* Compute instance
+	* Custom image -> Aqui é já ter uma imagem toda configurada para subir já pronta pra trabalhar
+		* Instance Configuration -> A imagem vai subir numa config definida (hardware, rede, gatilhos e demais)
+			* Instance Pool -> 
+				* AutoSclling Policy
+					* Stress Pool VM
+
+Vale lembrar que é bom testar tudo e confirmar se a estrutura funciona, afinal, isso só vai ser usado quando sua aplicação tiver sofrendo por falta de recurso, então isso tem que resolver ou sua aplicação vai dar ruim
+
+
+Criar uma VM na prática
+* Jogar a VM para um compartimento e rede
+* Rede é obrigatorio se ter
+
+
+Menu lateral -> Compute -> Instance -> Create Instance
+
+
+Dentro do create, vai aparecer para colocar o nome da VM (Não é o hostname) e o compartimento que ele pertence
+
+Abaixo dele tem as configurações do Placemnet, Shape e Network (Todos podem vir com as opçoes padrões, para isso, vá em Edit no canto da tela para alterar as configurações)
+
+
+Se tiver em duvida sobre o tipo do CPU Intel, só olhar o nome dele
+
+Se tiver um escudo na imagem que você quer subir, significa que tem um share hashing in instance boot -> Gera um hash durante o boot e garante a integridade da Imagem em uso com o hash -> Confere se não a code malicioso durante o boot
+* Mais ou menos a mesma ideia da microsoft com o W11, onde tem um hardware que faz essa verificação
+
+
+hostname somente é configurado nas opções avançadas de rede e é opcional
+
+
+Todo o acesso remoto a uma máquina na cloud oracle é feito por chave, não existe conexão por usuário e senha a mesmo que seja algo customizado e com esse proposito
+
+
+Na parte das chaves de SSH é possível colocar suas chaves para fazer a conexão (Paste public exists):
+* Aqui você pode colocar uma quantidade de chaves publicas para terem acesso a determinada VM
+
+
+No boot-volume é a configuração do volume e a quantidade a se usar
+
+Por fim e ignorando as opções avançadas, tem o:
+* Create -> Cria a VM
+* Save as stack -> Gera um code terraform
+
+
+Depois que clicar no create é possível:
+* Criar um stack para proximas máquinas
+* Destruir a máquina criada
+* Para ou iniciar ela e demais coisas
+
+
+Para fazer um ssh a máquina, faça:
+```
+guilhermeb@cloudshell:~ (us-ashburn-1)$ ssh opc@129.158.56.28
+FIPS mode initialized
+The authenticity of host '129.158.56.28 (129.158.56.28)' can't be established.
+ECDSA key fingerprint is SHA256:0QxFeFk/ehrvX1c5adW8NmPBwDvtQ8hYuh+dBAlL9Jw.
+ECDSA key fingerprint is SHA1:STO5dgNTtXoSV800us6MTEpIouY.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '129.158.56.28' (ECDSA) to the list of known hosts.
+Activate the web console with: systemctl enable --now cockpit.socket
+
+[opc@testepastel ~]$ 
+```
+
+* OPC -> Usuário padrão de maioria das imagens, tem pouca que não a usam
+* Pegue a chave criada e coloque nas suas referencias de ssh's para fazer a conexão 
+* Coloque o Ip publico da VM
+
+Pronto, você tem acesso a maquina
+
+_____________________________________________________
+
+
+
+
+_____________________________________________________
+
+### Storage
+
+OCI Storage service
+* Local NVMe (SSD) -> Storage temporario -> Só funciona enquanto a máquina tiver rodando, se ela parar por quaisquer motivos, perde todo o armazenado -> O unico cenário que ela mantem os dados é quando é ordenada a reiniciar, pois é uma ação na máquina
+	* Capacidade de terabytes, de  6,4 a 25,6 TB para VM e 51.2tb para Berametal
+	* Pode fazer de 200K a 3milhões de IOPS
+	* Uso normal: Data base, alta-disponibilidade e demais
+	* Montado na máquina
+* Block volume
+	* Mantem os dados -> Pode mover o disco entre máquinas
+	* Disco montado pela rede
+	* De 100 a 300k de IOPS
+	* 50GB a 32TB no volumes, porém pode anexar mais 32volumes de 32TB máximo cada
+	* Serve para aplicações mais comuns 
+	* É o uso padrão para a maioria das aplicações
+* File store
+	* Tem compatibilidade com o sistema de arquivos NFSv3
+	* È durable -> Pode ser copiado ou mantido normalmente entre os volumes
+	* Cabe até 8 Exabytes
+	* 2,5K IOPS por TB
+	* Normalmente usado por storages compartilhados -> Aŕeas comuns 
+* Camada de objetos
+	* Object Sorare (Standdard)
+		* Dado do momento -> baixa o dado para trabalhar 
+		* Volume extramente duravel
+		* 10TB por objeto -> Cada arquivo objeto, pode ter mais de um
+		* Scala internamente
+		* Aceita diversar copiar
+		* Trabalhos de momentos
+		* Trabalhos de logs, storeages, images e demais
+	* Objcect Storeage (Archive)
+		* Quase tudo igual ao anterior
+		* Tem um custo menor que o Standard
+		* Usado para BK ou manteneção dos arquivos
+
+
+
+Block Volume
+
+
+VPU -> Volume Performance Unit
+* È para melhorar a performance do disco, quando mais aumenta o VPU e tamanho de Disco, melhor é a performance em IOPS
+
+A oracle trabalha em MegaBytes 
+
+
+
+Para criar um volume é:
+Menu lateral -> Storage -> Block volume -> Create block Volume
+	* Coloca um nome
+	* Tem que falar em qual compartimento ele está 
+	* E tem que ficar na mesma região que vcê está (AD)
+	
+	
+Para habilitar a modificação de VPU's, selecione a opção de customizar o disco
+
+
+Pode trocar as VPU's com as máquinas rodando
+* Escalonamento e descalonamento do hardware em tempo real
+
+
+
+Tem três politcas de BK padrão
+* Gold
+	* 7 dias de retenção de BK incrementais diarios
+	* BK semanal aos domingos a meia noite com retenção de 4 semanas
+	* BK mensal no primeiro dia do mês com retenção de 12 meses
+	* Tem um BK full (Primeiro do dia do ano) com retenção de 5 anos
+* Silver 
+	* BK semanal aos domingos a meia noite com retenção de 4 semanas
+	* BK mensal no primeiro dia do mês com retenção de 12 meses
+	* Tem um BK full (Primeiro do dia do ano) com retenção de 5 anos
+* Bronze
+	* Mensalmente incremental a meia noite
+	* Um BK full de 5 anos de retenção
+
+Ele só diminui os recursos conforme o plano
+
+
+Se você apaga um Full, o Oracle converte o proximo BK a um Full
+* Esses BK's vão para o object storage -> Partições de objetos
+
+
+Cross region replication -> Habiente de dessastre recorver
+* Feita de forma automática e assincrona
+* Faz clones das partições em demais regiões
+* Se der problema, o serviço persiste, pois esse BK se torna o ativo em uso
+* Só e cobrado pelo block volume e por tráfegos que superar o tamanho do object(10 Teras)
+
+Discovert Recovery 
+* RPO de 1 hora
+* RTO de menos de 1 minuto
+
+
+Métodos de acesso aos Blocks
+* Readwrite -> Monta a instancia, formata e usa
+* RW - SHAREABLE -> Formatação que permite que o disco seja usado por várias máquina ao mesmo tempo  -> Parecido com o NFS
+* Read-only - SHAREABLE -> É um disco de leitura compartilhado entre as máquinas
+
+
+Vale comentar que todos os recursos oracle são criptografados e não podem operar sem essa camada
+
+
+Criando uma volume na pratica
+* Menu lateral -> Storage -> Block Volumes -> Create block Volume
+* Após confirmar o volume corretamente, colocando nome, instancia que pertence e as configs de tamanho de disco, click em criar
+* Vá para as instancias -> compute -> Instances -> Selecione a instancia que você quer
+* Dentro da instancia, vá para -> Attach block volume -> E selecione o volume que você instanciou anteriormente
+
+
+
+
+Tipos de disco
+Questão de IPO's
+Diferenças dos discos
+Enteder os tipos dos discos e seus cenários
+
+
+
+_____________________________________________________
+
+
+
+Object Storage
+* È um serviço nascido da Web com objetivo de atender as dataraw
+	* Dataraws -> logs, imagens, videos -> Ele entrega com segurança, porém são chamadas que não exigem real alta demanda
+	* Consegue trabalhar com:
+		* Politicas de segurança
+		* Lyfe cicly
+		* Permissionamento
+
+
+Cold e hot data
+* Velocidade de disponibilidade do serviço
+* Standard storage Tier (HOT)  -> Standard Bucket
+	* Tudo está pronto na hora, não tem latencias altas, porém é mais caro 
+* Infrequent Access -> Standard Bucket
+	* Tem latencia
+	* È mais barato que o Hot
+	* Seus custos são bons se você manter o dado por 31 dias neles
+* Archive Storage Tier -> Archive Bucket
+	* Leva 1 hora para iniciar as operações requisitadas
+	* Mais barato
+	* FUnção de ser um BK de reteção de longo tempo
+	* Valido se for manter o dado por 90 dias ou mais
+
+Infrequente é mais usado como um ponto de passe entre as duas opções mais usadas
+
+É possível mover os dados entre os tipos de storage com o life cycle -> Move os dados de uma área para a outra confirme atende a determinada caracteristica
+* Isso é chamado de Object Lifecycle Management
+
+
+Bk de Object storage:
+Quando está fazendo o BK dos dados, ele cria um object Store:
+ * Menos de 1 minuto de RTO com redimensionamento do file
+ * Snapshot de 30 minutos de até 2 teras de RPO
+ * Encriptação de toda operação (AES 256)
+ * Thoughput de 480Mbps
+ * Volumes de 1 a 32TB, todo o incremental irá criar uma fatia de 1GB a mais de consumo neste Storage
+
+
+Como criar:
+menu lateral -> Storage -> Object storage & ... ->  Buckets -> Create Bucket
+* Coloque o nome
+* selecione o tipo de storage
+* Deixe a cript padrão da oracle
+
+
+Para fazer o upload de dados dentro do Buckt, é necessário entrar no bucket e fazer um download nos objetos e da forma que você deseja, Standard, infrequent or archive
+
+
+Por exemplo, se você fizer o download de uma página html, você pode alterar a visibilidade para publico (Cuidado) e acessar os detalhes do obj, isso vai criar uma URL de acesso externo a pagina
+
+
+Ponto as a se prestar atenção
+* Life cycle
+* Replicação de regiões
+* Object e archive storage
+* Tipos de thiers
+
+
+____________________________________________
+OCI Storage Services -> Servico de armazenamento
+* Depende do pacote que você paga
+* è incluido nos shapes
+* Possível dessataxar um disco e passar para outra VM
+* Tem que criar os discos dentro dos mesmos AD's -> AD1 não vai ver os AD2
+* BK
+	* Gold -> Incremental diario com 7 dias de duracao, mantem BK mensal e BK completo anual -> Mantem um ano por 5 anos
+	* Silver -> Quase mesma coisa do silver, porém é semanal e a retenção é por 4 semanas -> Mantem anual por 5 anos
+	* bronze  -> BK incremental mensal e mantem um full por 5 anos
+	* Tem forma customizada -> Custo é somado pelas caracteristicas
+	
+	Forma de clock storage
+	* Volume
+		* Let oracle -> Deixa a oracle fazer isso
+		* ISCSI -> Customizado
+		* Paravirtual -> Usa um disco já existente
+		
+	Um block volume pode ser lido e escrito por várias VM's ao mesmo tempo
+		
+	* Para atachar o volume é recomendado estar dentro da mesma região
+	
+	* Não é possível criar block sem criptografia
+	
+Object-storage
+* Serve para dataraw -> Serve para manter as coisas a longo prazo -> Aqui é seguro
+* Cold and hot acess -> Quando mais quente(mais rapido) é a ação 
+* tipos
+	* Hot -> Acesso contante
+	* Cool -> Pode mexer constantemente, porém tem que manter um dado costante para não ser cobrado
+	* Cold -> Baixo acesso 
+	
+	LifeCycle -> Automação sobre storage
+	
+
+
+_____________________________________________________
+
+
+
+
+
+
+
+
+_____________________________________________________
+
+
+### banco de dados da cloud
+
+### Autonomous database
+* Completa automação de infraestrutura + Completa automação de database + Machine Learning e Datacenter autonamo
+* Usa IA para minar a complexidade e aumentar a performance como um todo
+* Com automação em todos os pontos a performance sobe e o custo desce
+* O DBA não precisa mexer em tudo, somente no que precisa e se focar em verdadeiras tarefas, por motivos que grande parte as ações ou o banco todo está funcionando de forma autonoma
+* Exadata Machine -> Autonamous database
+
+
+O inicio das automatizações começaram na versão 9 em 2001 e desde 2008, ela vem implementando novos equipamentos de hardware ou tecnologias para aumentar a performance do equipamento que contem os databases
+
+
+Os exadatas são a junção de inovações de hardware com inovações nos databases;
+
+Exadatas são desenhadas para rodar expecificar o banco de dados Oracle -> Por ser dedicado a isso, seu desempenho é enorme
+
+Tipos de automatos
+* Shared -> Totalmente gerenciado pela oracle -> Você não tem acesso a máquina, somente ao banco (È uma VM de banco que você tem acesso)
+* Dedicated -> Usar um exadata totalmente dedicado ao banco
+    * São usados em casos de ter alta demanda ou cenários expecificos
+
+Tipos de Workloads:
+* ATP -> Cargas de trabalho transacionais
+* ADW -> Cargas de trabalho analiticos -> Data Ware wouse
+
+Deploy Json
+
+Deploys para aplicações lowcode
+
+
+BK, manutenção, atualizações e demais coisas são totalmente automatizadas dentro do Automatos
+
+A I.A faz tunning do banco de dados de forma automática, isso aumenta a velocidade do banco e diminui seu esforço e custo final
+
+
+Elimina
+* Administração completa
+* Vulnerabilidades de segurança
+* Tempo de recuperação e falhas
+* Performance minada
+* Altos custos
+* * Confgurações datadas
+
+
+
+Existe tambem o Mysql dentro do Oracle
+* Mysql 8 Interprise (Completa)
+    * TDE
+    * Incriptação
+    * Suporte consutivo e demais
+    * Compativeis entre versões interprises
+* Rápida provisionação de recursos
+* Rápidas e faceis aplicações de testes, aplicações e restaurações 
+* O oracle da o Mysql para uso, más ela que faz todo o gerenciamento
+* Standalone
+    * Só cria uma instancia de Mysql
+    * Mais recomendado para ambientes pequenos -> Testes
+* High Availability
+    * Ambiente produtivo
+    * Alta disponibilidade
+    * Cria três ambientes de Mysql -> Cria 3 nós, um é o master e os outros dois são BK's
+        * São sincronizados
+    * Zero failover 
+    * RTO -> Recover Time Objective 
+    * RPO -> Recovery point Objective
+    * HeatWave -> Trabalha em memoria
+        * 400 vezes mais rápido que em armazenamento (Fica em memoria com processadores escalaveis)
+        * Aplica um motor HeatWave e cria um cluster em memória para o trabalho de processamento
+        * Usa IA para entregar resultados mais precisos 
+        * Processamento transacional e analitico
+
+
+
+
+Database Cloud Service
+* Hardware
+    * 1 a 24 OCUPS (48 com 2 Nodes RAC)
+    * 15 a 320 GB (640 GB com 2 node RAC)
+    * Armazenamento de 0.25Tb a 40TB
+* Armazenamento block storage
+* Backup é gerenciado automaticamente -> mantem por padrão por 60 dias 
+* Dataguard e
+* Auta disponibilidade -> Só disponivel para Exadata ou VM -> Baremetal não tem essa capacidade -> Cai essa pergunta na prova
+* Controle de patch é gerenciado pelo cliente
+* Versões disponiveis -> 11.2, 12.1, 12.2, 18c, 19c, 20c
+* Edições: Standard, Entreprise, High Performance, Extre Performance Editions
+* Licença: È possível trazer a linceça já paga caso possua uma, se não,usa uma BYOL
+
+
+
+
+BaseMatela -> X7 
+CPU: 2 a 52 OCUPS
+Memoria: 768 GB
+Storage: 51.TB NVMe
+* Versões disponiveis -> 11.2, 12.1, 12.2, 18c, 19c
+* Edições: Standard, Entreprise, High Performance, Extre Performance Editions
+
+
+
+Exadata Cloud Service X8
+* Totalmente modular (hardware)
+* Somente funciona com Extreme performance
+
+
+
+### NoSQL Database
+* Totalmenet serveless -> Não gerencia o hardware
+* Custo é calculado por:
+    * Read, Write, Tanto de Storage
+* Alterações online e on demand por APU
+* Suporta table Schema, Json e Ky/value
+* Aplicações que nromalmente usa: Games, Aplicações mobile, Big ata, IOT e demais
+* Visão geral: Gerenciamento completo, flexibilidade, amigavel, Sempre diponivel, Elasticidade, Controle de cesso, Alta performance, baixo custo e nuvem hibrida
+
+
+
+Para acessar os storages faça:
+Menu lateral -> Oracle Database -> bare metal, VM and Exadata -> Create DB System
+
+1° Passo
+Pode escolher o dominio
+Pode escolher o tipo de shape 
+Pode escolher qual modelo do shape
+Pode escolher o DB (Quantidade de nós e o tipo de database)
+Pode escolher o método de gerenciamento do software de armazenamento
+
+Hack está sempre em extreme performance
+
+Pode escolher deixar os discos serem gerenciados pela oracle ou pelo file-system local da Eqp
+Pode selecionar a quantidade de memoria de storage
+Chaves de ssh para acesso
+Pode escolher a VNC
+
+Não é uma boa coisa fazer uma banco de dados em uma VCN publica -> Basicamente expondo o banco de dados
+
+Coloque um nome que facilite seu entendimento
+UTC -> Timezone
+
+2° Passo
+Dar um nome ao banco de dados
+Dar um nome ao PDB
+Colocar a senha 
+Colocar o método de workload
+Pode habilitar o bk gerenciado
+Pode escoher o UTF do banco
+
+
+
+Para selecionar um banco NoSQL
+* Database -> Oracle NoSQL Database -> Create table -> Selecione as opções de criação de tabelas 
+
+
+Para selecionar um banco Mysql
+* Database -> Mysql -> Create table -> Selecione as opções de criação do DB
+
+Sobre os shapes de Mysql, sempre que você ver um E3, E4, são shapes com processadores AMD
+
+Das várias configurações, incluem: Escolha do dominio, VCN, Quantidade de armazenamento, usuário/senha, porta de conexão e demais
+
+
+
+Criando uma autonomo datawarewouse
+* menu lateral -> Oracle Database -> Automatos database -> Create autonomous database
+
+Selecione o comaprtimento
+Nome de eexibição -> Descricao
+Nome do banco de dados
+Tipo da carga de trabalho que o automatos irá trabalhar
+Escolha a implementação -> Tipo de hospendagem
+Selecione a versão do banco de dados
+Quantidade de OCPU's - 1 a 128
+Armazenamento - 1 a 128 TB
+Permitir auto scaling
+Colocar uma senha forte
+Escolher o método de acesso em rede -> Segurança é provida pela oracle ou pela escolha do método selecionada
+Escolher seu método de licença
+Colocar pessoas para contatos -> Para quem mandar os alerts das ocorrências
+
+
+Após a seleção e mandando sua criação, você pode acessar um painel para o controle do database
+* Console de serviço -> geral -> Metricas do banco de dados
+* Console de serviço -> Database actions -> Acesso ao banco e possibilidade de realizar ações dentro deles
+
+
+
+Ficar atento
+* Tipo de infra
+* Tipos de workloads
+* Configurações de hardware
+* Limites de hardware
+
+__________________________________________________________
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_____________________________________________________
+
+	
+Autonomous database
+* Deployment Option
+	* Shared
+		* prove somente um autonomos DB com Oracle handles e ATP/ADP
+	* Dedicated
+		* prove um hardware com suporte a ATP e ADW
+* Automação para ganhar tempo de implementação
+* Faz processo de tuning sobre os comandos
+* Elimina problemas no processo de DB e manteneção -> menos complexo, já nesce encriptado, performatico, tem processos de garantia dos dados
+* Com menor quantidade de problemas, menor os custos relacionado a isso, já que há garantia do serviço
+
+
+Sandtalone -> Só cria uma instancia de MySQL
+High avaliability -> Cria três nos de MySQL , um fica como principal e dois BK's, se algo da pau, os BK virão principal e o resto se torna BK
+
+Mysql com HeatWave
+* Precisa do ETL
+* Cria cluster em memoria, BK em memoria de ação, a vantagem é velocidade de operação, o problema é tamanho de memoria e é custoso em hardware
+
+
+
+
+
+Cloud system -> NoSQL
+
+23 - centros comerciais da oracle
+2 no brasil
+
+Latencia é normal entre 2 milisegundos entre os datacenters
+
+DataGuard
+
+Alta disponibilidade é só faita no HexaData e nas VM
+
+Baremetal está para ser descontinuado pela oracle 
+
+Quanto mais simples, menos recursos
+
+Stander -> oracle intance
+Interprise normal -> 
+Interprise High -> 
+/// Extreme -> RAC, inMemory Database
+
+
+A cobrança é feita por Escrita, leitura e quantidade armazenada -> Ambos os trẽs são gerenciaveis 
+
+Serveless NoSQL -> Disponibiliza um Dashboard de ações possíveis sobre o nó
+
+
+
+Automos database
+* Tem que selecionar o compartimento
+* Nome de identificação
+* Nome do banco de dados -> Não precisa ser o mesmo do setado inicialmente
+* Escolher o tipo de carga -> Escolher o mais compativel com sua aplicação
+* Tipo da infra onde o banco vai ficar -> Compartilhado (COm demais caras juntos ao server) e dedicado (hardware só pra ele)
+* OCPU -> Quanto de processamento o DB vai ter
+* Tamanho de armazenamento -> Minimo é 1TB
+* Selecionar a senha do DB
+* Selecionar serviços para subir junto ao DB
+* Pode fazer alerts aos responsaveis
+
+
+
+Containers 
+* Pode fazer push da imagem -> Ele analisa a img e se tiver algum problema, já relata
+* È quase como um docker build
+
+Configuration -> Chave/valor
+
+Functions é baseado em container
+
+
+
+
+
+ 
+_____________________________________________________
+
+### Desenvolvimento com oracle Cloud
+
+
+Infraestrutura baseada em codigo da oracle 
+
+OS serviços são baseados em algo opensource ou tem um minimo de compatibilidade com os mesmos
+ 
+
+Resource manager -> Gerenciador do kubernetes -> Gerencia as stacks
+* Possível criar ou importar configurações
+* É possível extrair todo o compartimento ou somente determinados serviços
+
+menu lateral -> Develop servers -> Resource manager -> Stacks
+* Colocar as informações da stack
+* Configurando os valores da stack
+
+
+Tudo que está dentro do Market place da oracle é terraform, então é passivel de gerenciar com o develop server stacks
+
+
+
+
+
+
+Menu lateral -> Develop services -> Containers registres -> Upload ou create containers
+
+
+O docker cli não consegue escolher um compartimento, sempre que fizer um push e o repositorio não existir, ele é criado no root
+* Uma forma de mitigar o problema é criar um repositorio vazio e fazer a imagem ir para lá para depois movimentar para dentro do compartimento alvo
+
+Algumas ações extras
+* Criação de um readme por imagem -> Facilita entendimento e desenvolvimento futuro
+* Tem uma varedura dentro da imagem -> Scanner que busca falhas de segurança e demais
+
+Scanner é acionado a todos os push de imagem
+
+
+
+
+
+
+Menu lateral -> Develop services -> Functions 
+* Funções de serviço
+* Baseado no FN Project
+* Cria a parte de função baseado no docker image
+* Suporte de linguagens -> GO, Python, Java, Node, Ruby
+    * Pela comunidade, tem como rodar DotNET
+
+Crie uma aplicação para ter acesso a parte de criação de funções no getting start
+
+
+Getting starts 
+* Mostra como fazer a conexão do Docker com o Oracle par afazer o uso das imagens 
+
+
+Por command line mostra em qual região vocẽ esta:
+```
+guilhermeb@cloudshell:~ (us-ashburn-1)$ fn list context
+CURRENT NAME            PROVIDER        API URL                                                 REGISTRY
+        default         oracle-cs
+*       us-ashburn-1    oracle-cs       https://functions.us-ashburn-1.oci.oraclecloud.com
+```
+
+Depois de criar a função via container, ela é mostrada no painel de functions da mesma tela
+* Lá mostra métricas e demais estados
+
+É possível colocar configurações extras de parametros via chave/valor dentro da função
+
+
+A estrutura da função após sua chamada fica com o .yaml da imagem + arquivos de exceução
+
+A cobrança desse serviço é realizada pela quantidade de chamadas da função e pela quantidade de GBPS de consumo da função
+
+
+Pode chamar a função por:
+* API gateway -> Tem que liberar a porta 443 para comunicação na security list interna
+    * Server como um agrupador de funções
+    * Possível criar uma catalogo de logs de ocorrencias
+    * Depois disso tem que fazer as rotas
+        * Colocar o path
+        * Definir o método de acesso a função 
+        * O tipo de execução da função
+            * Oracle funcitions -> Funções do sistema 
+            * Stock response -> Resposta chumbada
+        * Tem complementos como:
+            * Validador de header
+            * Body validation
+            * Cache request -> Cache por tempo de acesso
+    * Após isso é só finalizar
+* SDK's da oracle cloud
+* FN Cli
+* Rest API do OCI
+
+
+_____________________________________________________
+
+
+
+
+
+
+
+
+_____________________________________________________
+
+### Kubernets Oracle
+
+
+Oracle é um host certificado do kubernets -> Não pode alterar o base do projeto
+* Não faz customizações dentro das instalação
+* As constumizaões são terceiras na aplicação
+
+Kubernets
+* Control plane (controlador) e WorkNodes (Nós de trabalho, mestre e servos)
+
+
+Oracle cobra as instancias de worker
+* Não limita os worknodes
+
+
+Kubernetes é a base de tudo que é container que a Oracle trabalha
+Oracle Linux (Baseado no centoOS) -> Worknods
+
+Vem dois serviços por padrão:
+* Service type load balancer
+* Armazenamento
+
+
+
+
+Menu lateral -> Developer Services -> Kubernetes Clusters (OKE) -> Create Cluster
+* Quick Create -> Cria o cluster de forma rápida
+* Custom create -> Pode se reutilizar de uma estrutura já existente, ou fazer uma do zero
+
+A oracle suporta até três versões do Kubernetes (Passa por uns bons testes antes de efetivar)
+* Versões mais antigas são suportadas, porém são mais situacionais
+
+Quando criado o Cluster, tem as opçoes de:
+* Definir se os endereços dos nodes serão publicos ou privados
+* Definir se os workers serão publicos ou privados
+
+
+
+Oracle é bem restrita sobre a chamada da API do kubernetes
+
+
+
+Anotations são parametros para configurar o servido do worknode
+
+
+É possível colocar váriaveis de sistema dentro do yaml 
+
+
+Loadbalancer pode ter IP pubico de graça e o mesmo para ip publico efemero
+
+
+Um limite da conta free é somente um cluster de kubernets por tenance
+
+_____________________________________________________
+
+
+
+
+
+
+
+_____________________________________________________
+
+
+### Observability and managment
+
+Serve para ter uma boa visão sobre a aplicação e gerenciamento, ajuda na manteneção da mesma
+
+Partes dos serviços
+* Monitoring -> Cuida das métricas de infraestrutura -> Monitoramento proativo
+* Operations Insights -> Ajuda a fazer os insites 
+* Database management -> Gerenciamento de workloads de banco -> Automação de tarefas de DBA
+* Application Performance Monitoring -> Monitoramento sobre a performance da aplicação
+* Logging Analytics -> Log mining (aprendizagem)
+* Logging -> Base de logs unificadas
+
+
+Serviços de apoio aos principais
+* Events -> Monitorar e reportar eventos dos serviços
+* Notifications -> Notificações de aviso de ocorrencias
+* Functions -> Automação de infraestrutura com base em log e eventos
+* Service Connector hub -> Movimento das informações de um lado para o outro
+
+
+A prova ve mais sobre:
+* Cai de maneira mais técnica
+    * Monitoring
+    * Logging
+    * Logging Analytics
+* Cai de maneira mais conceitual
+    * Events
+    * Notifications
+
+
+monitoring 
+* Colocar uma área de analise de ocorrência para iniciar alarmes
+
+
+Events
+* Parecido com o monitoring
+* Segue regras para iniciar actions que são alarmes
+
+Logging
+* Gerenciamento de logs centralizado
+* Facil ativação
+* É uma central unificada de todos os logs do sistema e de facil ativação, fazendo que seja mais simples a analise dos dados
+* Permite uso de ferramentas de terceiros
+* È construido com base em open-source
+    * logs baseados em fluentd
+    * Compativel com CNCF CloudEvents 1.0
+
+
+Logging Analytics
+* Utiliza de IA sobre os logs para descobrir informações
+* Indenntifica padrões e outliers
+* Detalhamento e exploração de topologia
+* Usa o logging normal para se alimentar
+* Vasta gama de consultas 
+* Tem vários parses prontos para serem usados com várias ferramentas
+* Facil de customizar um parser para suas necessidades
+
+
+
+Menu lateral -> Develop services -> Application ingration -> Notifications -> Create topic
+
+Topicos são sub-incrições, é a criação de um canal 
+
+
+Depois de criar o topic, você tem que entrar nele para criar as subscrições
+* Aqui que começa a armar os alarmes de ações
+
+Quando você arma alarmes via email, você tem que aceitar o email que ativa os alarmes neste endereço de email
+
+
+Para fazer uso desse topic, você precisa entrar em uma instancia e configurar o alerta na parte de monitoramento e relacionar ao topic
+
+Dentro dessa regra, tem a parte de metricas, nela você vai selecionar a metrica que você quer monitorar e ser notificado
+
+
+Quando definir a métrica, vai haver uma representação visual nos graficos de métricas de uso dos recursos, claro, tem que haver um grafico para a atual meta selecionada
+
+Tem como selecionar a forma que você vai receber o conteudo, texto puro, json ou raw, esse é para sua maior conveniencia
+
+Isso cria um monitoramento ativo
+
+
+
+
+
+
+
+Menu lateral -> Observability & managament -> Event Services -> Rules
+
+Rules vai ser para disparar os eventos
+
+No create rule, você pode armar condições para as regras serem disparadas
+* Na parte de condições, tem que colocar:
+    * Condição do evento
+    * Nome do servico
+    * Tipo do evento
+
+Na parte e ações, você tem que colocar ações do evento, como:
+* Ação a ser feita
+* Comportamento do ação
+* Topico
+
+Com isso a regra é criadas
+
+
+Regras, eventos e demais são configurados para dentro do container, eles são validos ao ele
+
+
+___________________________________________________
+
+
+
+
+
+
+
+
+
+
+
+
+
+___________________________________________________
+
+
+### Analytics and AI
+
+
+Menu lateral -> Analytics & AI
+
+
+
+Data integration -> ETL -> Extração e transformação dos dados
+    * Gerenciado de forma nativa
+    * Extração, transofmração e carregamento de alto volume de dados
+    * Facil armazeamento, gerencia e compartilhamento de artefatos de desenvolvimento
+    * Usa uma engine Spark EtL ou ELT pushdows 
+    * Tem interface simples 
+    * Tem implementado o schema evolution protection -> Mantem a proteção sobre os dados e esquemas conforme se modifica
+
+    Ele cria a integração dos dados aos destinos
+
+    * beneficios
+        * Simplicidade que permite se focar em demais tarefas
+        * Simplifica processos de ETL / manutenção
+        * Permite integrações e transformações
+
+
+Data Flow -> Serviço que executa spark -> Fornece um cluster de spark
+    * Serviço OCI em Spark de qualquer escala
+    * Spark é um mecanismo de anaise de dados de alto volumes
+    * Abstração do gerenciamento do cluster -> Facilita desenvolvimento
+    * Tem interfaces para monitoramento
+    * Tem camada robusta de segurança
+        * RBAC
+    * Essa ferramenta não tem custoss a parte, somente a infra necessaria para executar
+
+    Tem como fazer upload de serviços já criados
+    Tem conceito de lib
+    Toda vez que uma função é criada, será feita um log de facil visualização e acesso 
+    
+    Tem como definir limites do acesso as VM's de flow
+
+
+    * Identifet access manage
+    * Com o fim do processamento, é desligado o cluster 
+
+
+
+Data catalog -> Gerenciamento de meta dados e governança
+    * Várias partes da analise de dados tem certa dificuldade sobre os dados a serem trabalhos
+    * Dificuldades:
+        * Dado a se analisar
+        * Entender o data lake
+        * Necessidade de melhorar a governança de dados
+    * Catalog
+        * Resolve todos as dificuldades acima
+            * Coleta de forma automatizada todos os metadados
+            * Pode realizar a curadoria de metadas -> Governança
+            * Busca com filtro -> Pode se usar filtros sobre os dados que cada área usaria 
+            * Otimização para a nuvem oracle -> Fora melhorias de performance e segurança, ele oferece acessos por meio de API acessos a esses dados
+            * Tem controle de nível de acesso
+
+
+
+Data science -> Criar, treinar, deploy e demais sobre ciencia de dados
+    * Permite explorar dados de qualquer fonte que se tenha acesso
+    * Trabalha com muito ferramental Open-source
+    * É multi-usuário, várias pessoas podem usar ao mesmo tempo
+    * É um serviço gerenciado
+    * Integração com vários serviços cloud oravle
+
+    Após criar um modelo válido, é possível se utilizar dele no menu de catalogos
+
+
+
+
+Na pratica
+Primeiro tem que criar os buckets para armazenar os objetos a serem analisados
+Crie uma VCN para comportar esses buckets 
+tem que pegar o object storage do tenance -> Vai usar isso para apontar qual tenancy será trabalhada com o dataflow
+
+
+
+O spark pega todos dados, faz uma filtragem, distribui tarefas, processa tudo e junta os resultados para ai te entrar o resultado final
+
+
+
+Para acessar o dataflow, vá (Faça os passos acima para ter os dados a serem trabalhados):
+* Menu lateral -> Analitycs & IA -> DataFlow -> Create 
+
+Nas opções:
+* Coloque o nome
+* Versão do spark a se usar
+* Shape que comanda
+* Shape que executa 
+* Quantidade de shapes que estão executando
+* Selecionar a linguagem do script que irá realizar a analise (Pode ser o local ou pode ser um script seu proprio)
+* Pode selecionar o bucket que contem o script que analise 
+* Pode jogar os logs em outro bucket
+
+Antes da execução, ele sempre pergunta se a config vai dar conta, pode se alterar para somente aquele momento caso necessário
+
+É possível acompanhar todo o log via WebIDE
+
+
+TensorFlow -> Google -> Treinamento de deeplearning
+
+___________________________________________________
+
+
+
+
+
+
+
+
+
+
+
+___________________________________________________
+
+
+### Governancia e consumo de dinheiro
+* Provisionamento
+* Manutenção
+* Ciclo de vida
+
+* Definido em um tri-pé
+    * Financeiro 
+    * Gerencial
+    * Elasticidade
+        * Gera vários problemas -> Code mau otimizado roda, porém consome mais e isso gera muito mais custo
+
+
+Para provisionar recursos pense:
+* OCI Cost Estimator -> Calcular o custo da estrutura planejada -> Calculadora de volume
+    * Volume de CPU, Disco, Rede e demais
+    * Outras nuvens normalmente calcula pela máquina
+    * O valor estimado do Cost OCI é sem imposto, então tem que colocar ele para fechar a conta
+
+
+Previsibilidade de custo
+* Dolarização da economia -> Segue o valor em dolar
+* Dolar oracle é congelado (Dolar flat) -> Valor é travado no fechamendo de contrato -> É previsivel e passivel de controle de custos
+
+Maior pesadelo da falta de previsilidade
+* Coisas que você não controla
+* Valores variaveis
+* Falta de planejamento
+
+
+Compartmimentalização
+Oracle cloud resource consumption tools
+* Divisão de compartimentos para determinadas áreas -> Isso ajuda na previsão 
+* È possível etiquetar tudo para saber exatamente quem está mais caro
+* É possível colocar alertas e previsões sobre custos
+* É possível definir cota para usuários (valores, recursos e demais) -> "user quota", "Budget control" e "consumption usage report" -> Questão de prova
+
+Isso tudo resulta numa estabilidade financeiro de custos -> Tirandos os valores randomicos que iriam aparecer e estabilizando os custos
+
+CLI é o mais convencional para a governança, além de possuir ferramentas para ajudar, como o steampipe (converte comandos em SQL requests), isso torna mais rapido e leve as chamadas
+
+Budget -> Ele alarma o consumo, más não para ele
+* Criado dessa forma por segurança
+
+Ferramenta -> Cost Analysis Console
+* Filtra o conteudo para analise dos custos com grande precisão, porém, não é tempo real e sim com uma carga da basede tempos em tempos
+* Posibilita total vizibilidade sobre o consumo, quem, oq e demais estavam consumindo 
+    * É possível achar os culpados por alto consumo ou não planejados
+* È possível exportar esse relatorio de consumo para outros usuários
+
+
+Cloud Advisor e Guard -> Ajudam e avisão sobre os custos e estados
+
+Gestão de ciclo de vida
+Oracle Clound Advisor
+* Avisa sobre gastos evitaveis -> Recursos inutilizados 
+* Pode fazer correções sobre a infraestrutura
+
+menu lateral -> Identily & security -> Cloud guard
+menu lateral -> Identily & security -> Secure zone -> proteje as redes -> Recomendado habilitar
+
+
+
+
+
+___________________________________________________
+
+
